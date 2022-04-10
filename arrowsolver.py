@@ -9,6 +9,7 @@ class Singleton(type):
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
+# To store the solution without worrying about overwriting.
 class Solution(metaclass=Singleton):
     def __init__(self,d1,d2):
         self.dims = (d1,d2)
@@ -18,12 +19,14 @@ class Solution(metaclass=Singleton):
         r,c = divmod(b,self.dims[0])
         self.matrix[r][c] += 1
 
+# OS-dependent screen clear.
 def clear():
     if name == 'nt':
         _ = system('cls')
     else:
         _ = system('clear')
 
+# Prevents repetition for printing if-cases.
 def printpuzzle(d):
     if len(d) == 3:
         print3x3(d)
@@ -42,9 +45,11 @@ def print4x4(d):
           str(d[2][0])+' '+str(d[2][1])+' '+str(d[2][2])+' '+str(d[2][3])+'\n'+
           str(d[3][0])+' '+str(d[3][1])+' '+str(d[3][2])+' '+str(d[3][3])+'\n')
 
+# Minimizes repetition.
 def printmoves(moves):
     print('Move '+str(moves)+'\n')
 
+# Prints AND executes button push.
 def pushprint(d,moves,b,v):
     d = pusharrow(d,b)
     moves += 1
@@ -53,6 +58,7 @@ def pushprint(d,moves,b,v):
         printpuzzle(d)
     return (d,moves)
 
+# All buttons adjacent (diagonal and cardinal) must be rotated with the pushed button.
 def pusharrow(arrows,button):
     b=divmod(button,len(arrows))
     for i in range(-1,2):
@@ -64,6 +70,7 @@ def pusharrow(arrows,button):
                 pass
     return arrows
 
+# Checks if solved.
 def solvecheck(d):
     solved = 1
     for i in range(0,len(d)):
@@ -73,6 +80,7 @@ def solvecheck(d):
                 return solved
     return solved
 
+# Solves bottom row.
 def alignfirst(d,s,v):
     a = len(d)-1
     moves = 0
@@ -90,6 +98,7 @@ def alignfirst(d,s,v):
         pass
     return (d,moves)
 
+# Solves all rows besides bottom and top, iteratively.
 def alignrow(d,moves,rowscompleted,s,v):
     a = len(d)-rowscompleted-1
     while d[a][0] != d[a+1][0]:
@@ -137,6 +146,7 @@ def alignrow(d,moves,rowscompleted,s,v):
             d,moves = pushprint(d,moves,(a-1)*len(d)+pos,v)
     return (d,moves)
 
+# Solves final row.
 def alignlast(d,moves,s,v):
     dim = len(d)
     diff = (d[0][0]-d[1][0])%4
@@ -222,6 +232,7 @@ def alignlast(d,moves,s,v):
         pass
     return (d,moves)
 
+# Makes all arrows face up (per the solution requirement).
 def faceup(d,moves,s,v=0):
     sol = lambda x: x%4
     dim = len(d)
